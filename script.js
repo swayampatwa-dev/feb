@@ -9,10 +9,15 @@ const envelopeContainer = document.getElementById('envelopeContainer');
 const envelopeFlap = document.getElementById('envelopeFlap');
 const letter = document.getElementById('letter');
 const finalCelebration = document.getElementById('finalCelebration');
+const loveMusic = document.getElementById('loveMusic');
+const musicToggle = document.getElementById('musicToggle');
+const musicControls = document.getElementById('musicControls');
 
 // State Management
 let noClickCount = 0;
 let isEscaping = false;
+let isMusicPlaying = false;
+let musicStarted = false;
 
 // Cute messages for NO button clicks
 const cuteMessages = [
@@ -35,12 +40,145 @@ function initializeApp() {
     // For mobile devices
     noBtn.addEventListener('touchstart', handleNoHover);
     
+    // Music controls
+    musicToggle.addEventListener('click', toggleMusic);
+    
     // Add decorative images to the website
     addDecorativeImages();
+    
+    // Initialize music
+    initializeMusic();
+    
+    // Add first interaction listener to start music
+    addFirstInteractionListener();
+}
+
+// Initialize music
+function initializeMusic() {
+    // Set volume to a comfortable level
+    loveMusic.volume = 0.3;
+    
+    // Set music to play only 20 seconds
+    loveMusic.currentTime = 0;
+    
+    // Add music controls styles
+    musicControls.style.position = 'fixed';
+    musicControls.style.bottom = '20px';
+    musicControls.style.right = '20px';
+    musicControls.style.zIndex = '1000';
+    
+    // Try to start music immediately (may be blocked by browser)
+    attemptAutoStart();
+}
+
+// Attempt to auto-start music immediately
+function attemptAutoStart() {
+    loveMusic.play().then(() => {
+        musicStarted = true;
+        isMusicPlaying = true;
+        updateMusicButton();
+        start20SecondLoop();
+        console.log('Music started automatically');
+    }).catch(error => {
+        console.log('Auto-start prevented, will start on first interaction');
+    });
+}
+
+// Start 20-second loop
+function start20SecondLoop() {
+    loveMusic.addEventListener('timeupdate', function() {
+        if (loveMusic.currentTime >= 20) {
+            loveMusic.currentTime = 0; // Restart from beginning
+        }
+    });
+}
+
+// Toggle music play/pause
+function toggleMusic() {
+    if (!musicStarted) {
+        // Start music on first interaction
+        loveMusic.play().then(() => {
+            musicStarted = true;
+            isMusicPlaying = true;
+            updateMusicButton();
+            start20SecondLoop();
+            showMessage("🎵 Romantic music started! Enjoy the mood 💕");
+        }).catch(error => {
+            console.log('Music autoplay prevented:', error);
+            showMessage("Click the music button 🎵 to play romantic music!");
+        });
+    } else {
+        if (isMusicPlaying) {
+            loveMusic.pause();
+            isMusicPlaying = false;
+        } else {
+            loveMusic.play();
+            isMusicPlaying = true;
+        }
+        updateMusicButton();
+    }
+}
+
+// Update music button appearance
+function updateMusicButton() {
+    const icon = musicToggle.querySelector('.music-icon');
+    if (isMusicPlaying) {
+        icon.textContent = '🎶';
+        musicToggle.style.background = 'linear-gradient(135deg, #ff6b9d, #ff8787)';
+        musicToggle.style.animation = 'musicPulse 2s ease-in-out infinite';
+    } else {
+        icon.textContent = '🎵';
+        musicToggle.style.background = 'linear-gradient(135deg, #8b8b8b, #a9a9a9)';
+        musicToggle.style.animation = 'none';
+    }
+}
+
+// Add first interaction listener to start music
+function addFirstInteractionListener() {
+    const startMusicOnInteraction = (event) => {
+        if (!musicStarted) {
+            loveMusic.play().then(() => {
+                musicStarted = true;
+                isMusicPlaying = true;
+                updateMusicButton();
+                start20SecondLoop();
+                showMessage("🎵 Romantic music started! Enjoy the mood 💕");
+            }).catch(error => {
+                console.log('Music autoplay prevented:', error);
+            });
+            
+            // Remove the listener after first interaction
+            document.removeEventListener('click', startMusicOnInteraction);
+            document.removeEventListener('touchstart', startMusicOnInteraction);
+            document.removeEventListener('keydown', startMusicOnInteraction);
+        }
+    };
+    
+    // Add listeners for various interactions
+    document.addEventListener('click', startMusicOnInteraction);
+    document.addEventListener('touchstart', startMusicOnInteraction);
+    document.addEventListener('keydown', startMusicOnInteraction);
+}
+
+// Start music on YES button click
+function startLoveMusic() {
+    if (!musicStarted) {
+        loveMusic.play().then(() => {
+            musicStarted = true;
+            isMusicPlaying = true;
+            updateMusicButton();
+            start20SecondLoop();
+        }).catch(error => {
+            console.log('Music play failed:', error);
+        });
+    }
 }
 
 // Handle YES button click with envelope animation
 function handleYesClick() {
+    // Start love music
+    startLoveMusic();
+    
     // Create massive confetti effect
     createMassiveConfetti();
     
@@ -847,6 +985,85 @@ style.textContent = `
         .corner-img {
             width: 50px;
             height: 50px;
+        }
+    }
+    
+    /* Music Controls Styles */
+    .music-controls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .music-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(135deg, #8b8b8b, #a9a9a9);
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .music-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .music-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .music-icon {
+        font-size: 1.8rem;
+        animation: none;
+    }
+    
+    @keyframes musicPulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.6);
+        }
+    }
+    
+    /* Responsive music controls */
+    @media (max-width: 768px) {
+        .music-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+        }
+        
+        .music-icon {
+            font-size: 1.5rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .music-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 1rem;
+        }
+        
+        .music-icon {
+            font-size: 1.3rem;
+        }
+        
+        .music-controls {
+            bottom: 15px;
+            right: 15px;
         }
     }
 `;
