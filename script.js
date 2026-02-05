@@ -67,8 +67,19 @@ function initializeMusic() {
     musicControls.style.right = '20px';
     musicControls.style.zIndex = '1000';
     
-    // Try to start music immediately (may be blocked by browser)
+    // Make music button always visible and prominent
+    musicToggle.style.display = 'flex';
+    musicToggle.style.visibility = 'visible';
+    musicToggle.style.opacity = '1';
+    
+    // Try to start music immediately
     attemptAutoStart();
+    
+    // Force start music after 1 second (backup method)
+    setTimeout(forceStartMusic, 1000);
+    
+    // Add mouse move listener to start music (another backup)
+    document.addEventListener('mousemove', startMusicOnMouseMove, { once: true });
 }
 
 // Attempt to auto-start music immediately
@@ -82,6 +93,38 @@ function attemptAutoStart() {
     }).catch(error => {
         console.log('Auto-start prevented, will start on first interaction');
     });
+}
+
+// Force start music (backup method)
+function forceStartMusic() {
+    if (!musicStarted) {
+        loveMusic.play().then(() => {
+            musicStarted = true;
+            isMusicPlaying = true;
+            updateMusicButton();
+            start20SecondLoop();
+            console.log('Music force started');
+            showMessage("🎵 Romantic music is playing! Enjoy the mood 💕");
+        }).catch(error => {
+            console.log('Force start also prevented, trying user interaction');
+        });
+    }
+}
+
+// Start music on mouse move (backup method)
+function startMusicOnMouseMove() {
+    if (!musicStarted) {
+        loveMusic.play().then(() => {
+            musicStarted = true;
+            isMusicPlaying = true;
+            updateMusicButton();
+            start20SecondLoop();
+            console.log('Music started on mouse move');
+            showMessage("🎵 Romantic music started! Enjoy the mood 💕");
+        }).catch(error => {
+            console.log('Mouse move start prevented');
+        });
+    }
 }
 
 // Start 20-second loop
@@ -108,12 +151,17 @@ function toggleMusic() {
             showMessage("Click the music button 🎵 to play romantic music!");
         });
     } else {
-        if (isMusicPlaying) {
-            loveMusic.pause();
-            isMusicPlaying = false;
-        } else {
+        // Always keep music playing - don't allow pause
+        if (!isMusicPlaying) {
             loveMusic.play();
             isMusicPlaying = true;
+            updateMusicButton();
+            showMessage("🎵 Music always plays for romantic mood! 💕");
+        } else {
+            // Show message that music can't be paused
+            showMessage("🎵 Romantic music must always play! Click again if you want to restart 🔄");
+            // Restart music from beginning
+            loveMusic.currentTime = 0;
         }
         updateMusicButton();
     }
@@ -130,6 +178,31 @@ function updateMusicButton() {
         icon.textContent = '🎵';
         musicToggle.style.background = 'linear-gradient(135deg, #8b8b8b, #a9a9a9)';
         musicToggle.style.animation = 'none';
+    }
+}
+
+// Ensure music always plays - can be called from HTML
+function ensureMusicAlwaysPlays() {
+    if (!musicStarted) {
+        loveMusic.play().then(() => {
+            musicStarted = true;
+            isMusicPlaying = true;
+            updateMusicButton();
+            start20SecondLoop();
+            showMessage("🎵 Romantic music is now playing forever! 💕");
+        }).catch(error => {
+            console.log('Music play failed:', error);
+            showMessage("Please interact with the page to start music! 🎵");
+        });
+    } else {
+        // Restart music
+        loveMusic.currentTime = 0;
+        if (!isMusicPlaying) {
+            loveMusic.play();
+            isMusicPlaying = true;
+        }
+        updateMusicButton();
+        showMessage("🎵 Music restarted! Romantic mood continues! 💕");
     }
 }
 
@@ -1064,6 +1137,92 @@ style.textContent = `
         .music-controls {
             bottom: 15px;
             right: 15px;
+        }
+    }
+    
+    /* Always Visible Music Button */
+    .always-music-btn {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1001;
+    }
+    
+    .permanent-music-btn {
+        background: linear-gradient(135deg, #ff6b9d, #ff8787, #ffc0cb);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        transition: all 0.3s ease;
+        animation: alwaysMusicPulse 2s ease-in-out infinite;
+        font-family: 'Caveat', cursive;
+    }
+    
+    .permanent-music-btn:hover {
+        transform: translateX(-50%) scale(1.05);
+        box-shadow: 0 6px 20px rgba(255, 107, 157, 0.6);
+    }
+    
+    .permanent-music-btn:active {
+        transform: translateX(-50%) scale(0.95);
+    }
+    
+    .permanent-music-icon {
+        font-size: 1.3rem;
+        animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    
+    .music-text {
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+    
+    @keyframes alwaysMusicPulse {
+        0%, 100% {
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+        }
+        50% {
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.7);
+        }
+    }
+    
+    /* Responsive always music button */
+    @media (max-width: 768px) {
+        .permanent-music-btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+        
+        .music-text {
+            font-size: 0.9rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .always-music-btn {
+            top: 15px;
+        }
+        
+        .permanent-music-btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .music-text {
+            font-size: 0.8rem;
+        }
+        
+        .permanent-music-icon {
+            font-size: 1.1rem;
         }
     }
 `;
