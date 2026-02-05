@@ -34,12 +34,18 @@ function initializeApp() {
     
     // For mobile devices
     noBtn.addEventListener('touchstart', handleNoHover);
+    
+    // Add decorative images to the website
+    addDecorativeImages();
 }
 
 // Handle YES button click with envelope animation
 function handleYesClick() {
     // Create massive confetti effect
     createMassiveConfetti();
+    
+    // Create love image animations
+    createLoveImageAnimation();
     
     // Hide main content and show success message
     mainContent.style.display = 'none';
@@ -87,19 +93,27 @@ function transitionToFinalCelebration() {
     createUltimateCelebration();
 }
 
-// Create massive confetti effect
+// Create massive confetti effect with flowers
 function createMassiveConfetti() {
     const colors = ['#ff6b9d', '#ff8787', '#ffc0cb', '#ffb6c1', '#ff1493', '#e91e63'];
     const shapes = ['❤️', '💕', '💖', '💗', '💝', '💘', '💓', '💞'];
+    const flowers = ['🌹', '🌸', '🌺', '🌷', '🌻', '🌼', '💐', '🏵️'];
     
     for (let i = 0; i < 100; i++) {
         setTimeout(() => {
             const confetti = document.createElement('div');
             
-            if (Math.random() > 0.2) {
+            const random = Math.random();
+            if (random < 0.3) {
+                // 30% flowers
+                confetti.className = 'confetti flower';
+                confetti.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            } else if (random < 0.8) {
+                // 50% hearts
                 confetti.className = 'confetti heart';
                 confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
             } else {
+                // 20% colored confetti
                 confetti.className = 'confetti';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             }
@@ -118,15 +132,23 @@ function createMassiveConfetti() {
     }
 }
 
-// Create extra confetti for envelope reveal
+// Create extra confetti for envelope reveal with flowers
 function createExtraConfetti() {
     const shapes = ['💕', '💖', '💗'];
+    const flowers = ['🌹', '🌸', '🌺', '💐'];
     
     for (let i = 0; i < 30; i++) {
         setTimeout(() => {
             const confetti = document.createElement('div');
-            confetti.className = 'confetti heart';
-            confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+            
+            if (Math.random() < 0.5) {
+                confetti.className = 'confetti flower';
+                confetti.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            } else {
+                confetti.className = 'confetti heart';
+                confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+            }
+            
             confetti.style.left = Math.random() * 100 + '%';
             confetti.style.animationDelay = Math.random() * 0.3 + 's';
             confetti.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
@@ -140,26 +162,35 @@ function createExtraConfetti() {
     }
 }
 
-// Create heart explosion effect
+// Create heart and flower explosion effect
 function createHeartExplosion() {
     const hearts = ['❤️', '💕', '💖', '💗', '💝', '💘'];
+    const flowers = ['🌹', '🌸', '🌺', '🌷', '🌻', '🌼', '💐', '🏵️'];
     
-    for (let i = 0; i < 20; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'explosion-heart-effect';
-        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-        heart.style.position = 'fixed';
-        heart.style.left = '50%';
-        heart.style.top = '50%';
-        heart.style.transform = 'translate(-50%, -50%)';
-        heart.style.fontSize = (Math.random() * 2 + 1) + 'rem';
-        heart.style.zIndex = '1001';
-        heart.style.pointerEvents = 'none';
+    for (let i = 0; i < 30; i++) {
+        const element = document.createElement('div');
+        element.className = 'explosion-heart-effect';
         
-        const angle = (Math.PI * 2 * i) / 20;
+        // Mix of hearts and flowers
+        if (Math.random() < 0.5) {
+            element.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        } else {
+            element.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            element.classList.add('flower-explosion');
+        }
+        
+        element.style.position = 'fixed';
+        element.style.left = '50%';
+        element.style.top = '50%';
+        element.style.transform = 'translate(-50%, -50%)';
+        element.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+        element.style.zIndex = '1001';
+        element.style.pointerEvents = 'none';
+        
+        const angle = (Math.PI * 2 * i) / 30;
         const velocity = Math.random() * 300 + 200;
         
-        document.body.appendChild(heart);
+        document.body.appendChild(element);
         
         // Animate explosion
         let startTime = null;
@@ -172,12 +203,12 @@ function createHeartExplosion() {
                 const y = Math.sin(angle) * velocity * progress + (progress * progress * 100);
                 const opacity = 1 - (progress / 2);
                 
-                heart.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-                heart.style.opacity = opacity;
+                element.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${progress * 360}deg)`;
+                element.style.opacity = opacity;
                 
                 requestAnimationFrame(animateExplosion);
             } else {
-                heart.remove();
+                element.remove();
             }
         }
         
@@ -201,15 +232,26 @@ function createUltimateCelebration() {
     createScreenFlash();
 }
 
-// Create celebration confetti
+// Create celebration confetti with flowers
 function createCelebrationConfetti() {
     const colors = ['#ff6b9d', '#ff8787', '#ffc0cb', '#ff1493'];
     const shapes = ['❤️', '💕', '💖', '💗'];
+    const flowers = ['🌹', '🌸', '🌺', '🌷', '🌻', '💐'];
     
     for (let i = 0; i < 15; i++) {
         const confetti = document.createElement('div');
-        confetti.className = 'confetti heart';
-        confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+        
+        const random = Math.random();
+        if (random < 0.4) {
+            // 40% flowers
+            confetti.className = 'confetti flower';
+            confetti.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+        } else {
+            // 60% hearts
+            confetti.className = 'confetti heart';
+            confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+        }
+        
         confetti.style.left = Math.random() * 100 + '%';
         confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
         confetti.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
@@ -222,23 +264,34 @@ function createCelebrationConfetti() {
     }
 }
 
-// Create floating hearts from bottom
+// Create floating hearts and flowers from bottom
 function createFloatingHeartFromBottom() {
-    const heart = document.createElement('div');
-    heart.className = 'floating-heart-bottom';
-    heart.textContent = ['❤️', '💕', '💖', '💗'][Math.floor(Math.random() * 4)];
-    heart.style.position = 'fixed';
-    heart.style.bottom = '-50px';
-    heart.style.left = Math.random() * 100 + '%';
-    heart.style.fontSize = (Math.random() * 2 + 1) + 'rem';
-    heart.style.zIndex = '1000';
-    heart.style.pointerEvents = 'none';
-    heart.style.animation = 'floatUpFromBottom 4s ease-out forwards';
+    const hearts = ['❤️', '💕', '💖', '💗'];
+    const flowers = ['🌹', '🌸', '🌺', '🌷', '🌻', '🌼'];
     
-    document.body.appendChild(heart);
+    const element = document.createElement('div');
+    
+    // Randomly choose between heart and flower
+    if (Math.random() < 0.5) {
+        element.className = 'floating-heart-bottom';
+        element.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    } else {
+        element.className = 'floating-flower-bottom';
+        element.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+    }
+    
+    element.style.position = 'fixed';
+    element.style.bottom = '-50px';
+    element.style.left = Math.random() * 100 + '%';
+    element.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+    element.style.zIndex = '1000';
+    element.style.pointerEvents = 'none';
+    element.style.animation = 'floatUpFromBottom 4s ease-out forwards';
+    
+    document.body.appendChild(element);
     
     setTimeout(() => {
-        heart.remove();
+        element.remove();
     }, 4000);
 }
 
@@ -264,23 +317,140 @@ function createScreenFlash() {
 
 // Handle NO button click
 function handleNoClick() {
-noClickCount++;
+    noClickCount++;
     
-if (noClickCount === 1) {
-// First click - show "Think again" message and enable escaping
-showMessage("Think again 😌");
-isEscaping = true;
+    if (noClickCount === 1) {
+        // First click - show "Think again" message, crying image, and enable escaping
+        showMessage("Think again 😌");
+        showCryingImage();
+        isEscaping = true;
         
-// Add shake animation to NO button
-noBtn.style.animation = 'shake 0.5s';
-setTimeout(() => {
-noBtn.style.animation = '';
-}, 500);
-} else if (noClickCount === 2) {
-// Second click - show final message and move button away
-showMessage("Ab NO option available nahi hai 😈");
-moveNoButton();
+        // Add shake animation to NO button
+        noBtn.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            noBtn.style.animation = '';
+        }, 500);
+    } else if (noClickCount === 2) {
+        // Second click - show final message and move button away
+        showMessage("Ab NO option available nahi hai 😈");
+        moveNoButton();
+    }
 }
+
+// Add decorative images throughout the website
+function addDecorativeImages() {
+    const decorativeImages = [
+        'assets/download (1).jpg',
+        'assets/download (2).jpg', 
+        'assets/download.jpg',
+        'assets/images.jpg'
+    ];
+    
+    // Add floating decorative images
+    for (let i = 0; i < 6; i++) {
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'decorative-image';
+        
+        const img = document.createElement('img');
+        img.src = decorativeImages[i % decorativeImages.length];
+        img.className = 'decorative-img';
+        img.alt = 'Love Decoration';
+        
+        // Random positioning and animation
+        imgContainer.style.left = Math.random() * 90 + 5 + '%';
+        imgContainer.style.top = Math.random() * 90 + 5 + '%';
+        imgContainer.style.animationDelay = Math.random() * 5 + 's';
+        imgContainer.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        
+        imgContainer.appendChild(img);
+        document.body.appendChild(imgContainer);
+    }
+    
+    // Add corner decorative images
+    addCornerImages();
+}
+
+// Add decorative images to corners
+function addCornerImages() {
+    const corners = [
+        { position: 'top-left', x: '5%', y: '5%', rotation: '-15deg' },
+        { position: 'top-right', x: '85%', y: '5%', rotation: '15deg' },
+        { position: 'bottom-left', x: '5%', y: '85%', rotation: '-25deg' },
+        { position: 'bottom-right', x: '85%', y: '85%', rotation: '25deg' }
+    ];
+    
+    corners.forEach((corner, index) => {
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'corner-image';
+        imgContainer.style.position = 'fixed';
+        imgContainer.style.left = corner.x;
+        imgContainer.style.top = corner.y;
+        imgContainer.style.transform = `rotate(${corner.rotation})`;
+        imgContainer.style.zIndex = '5';
+        
+        const img = document.createElement('img');
+        img.src = `assets/download (${(index % 3) + 1}).jpg`;
+        if (index === 3) img.src = 'assets/images.jpg';
+        img.className = 'corner-img';
+        img.alt = 'Corner Decoration';
+        
+        imgContainer.appendChild(img);
+        document.body.appendChild(imgContainer);
+    });
+}
+
+// Show crying image when NO is clicked
+function showCryingImage() {
+    const cryingImg = document.createElement('div');
+    cryingImg.className = 'crying-image-overlay';
+    cryingImg.innerHTML = `
+        <div class="crying-image-container">
+            <img src="assets/CRy.jpg" alt="Crying" class="crying-img">
+            <div class="crying-text">Please don't say no! 😢</div>
+        </div>
+    `;
+    
+    document.body.appendChild(cryingImg);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        cryingImg.remove();
+    }, 3000);
+}
+
+// Create love image animations
+function createLoveImageAnimation() {
+    const loveImages = [
+        'assets/download (1).jpg',
+        'assets/download (2).jpg', 
+        'assets/download.jpg',
+        'assets/images.jpg'
+    ];
+    
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'love-image-animation';
+            
+            const img = document.createElement('img');
+            img.src = loveImages[i % loveImages.length];
+            img.className = 'love-img';
+            img.alt = 'Love';
+            
+            // Random position and animation
+            imgContainer.style.left = Math.random() * 80 + 10 + '%';
+            imgContainer.style.top = Math.random() * 80 + 10 + '%';
+            imgContainer.style.animationDelay = Math.random() * 2 + 's';
+            
+            imgContainer.appendChild(img);
+            document.body.appendChild(imgContainer);
+            
+            // Remove after animation
+            setTimeout(() => {
+                imgContainer.remove();
+            }, 4000);
+        }, i * 500);
+    }
 }
 
 // Handle NO button hover (for escape functionality)
@@ -417,6 +587,266 @@ style.textContent = `
         100% {
             transform: translate(-50%, -50%) scale(3);
             opacity: 0;
+        }
+    }
+    
+    .flower-explosion {
+        animation: explodeOutFlower 2.5s ease-out forwards;
+    }
+    
+    @keyframes explodeOutFlower {
+        0% {
+            transform: translate(-50%, -50%) scale(0) rotate(0deg);
+            opacity: 1;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(2) rotate(180deg);
+            opacity: 0.8;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(4) rotate(720deg);
+            opacity: 0;
+        }
+    }
+    
+    .confetti.flower {
+        animation: fallFlower 3s ease-out forwards;
+    }
+    
+    @keyframes fallFlower {
+        0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+        }
+    }
+    
+    .floating-flower-bottom {
+        animation: floatUpFlower 4s ease-out forwards;
+    }
+    
+    @keyframes floatUpFlower {
+        0% {
+            transform: translateY(0) rotate(0deg) scale(0.5);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.9;
+        }
+        50% {
+            transform: translateY(-60vh) rotate(180deg) scale(1.2);
+            opacity: 1;
+        }
+        90% {
+            opacity: 0.9;
+        }
+        100% {
+            transform: translateY(-120vh) rotate(540deg) scale(0.8);
+            opacity: 0;
+        }
+    }
+    
+    /* Crying Image Styles */
+    .crying-image-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1002;
+        animation: fadeInOverlay 0.5s ease-out;
+    }
+    
+    @keyframes fadeInOverlay {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    .crying-image-container {
+        text-align: center;
+        animation: cryingShake 0.5s ease-in-out infinite;
+    }
+    
+    @keyframes cryingShake {
+        0%, 100% {
+            transform: translateX(0) scale(1);
+        }
+        25% {
+            transform: translateX(-10px) scale(1.05);
+        }
+        75% {
+            transform: translateX(10px) scale(0.95);
+        }
+    }
+    
+    .crying-img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 5px solid #ff6b9d;
+        box-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+        object-fit: cover;
+    }
+    
+    .crying-text {
+        margin-top: 1rem;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Love Image Animation Styles */
+    .love-image-animation {
+        position: fixed;
+        z-index: 998;
+        pointer-events: none;
+        animation: loveImageFloat 4s ease-out forwards;
+    }
+    
+    @keyframes loveImageFloat {
+        0% {
+            transform: scale(0) rotate(0deg);
+            opacity: 0;
+        }
+        20% {
+            transform: scale(1.2) rotate(90deg);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1) rotate(180deg);
+            opacity: 1;
+        }
+        80% {
+            transform: scale(0.8) rotate(270deg);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(0) rotate(360deg);
+            opacity: 0;
+        }
+    }
+    
+    .love-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid #ff6b9d;
+        box-shadow: 0 0 20px rgba(255, 107, 157, 0.7);
+        object-fit: cover;
+    }
+    
+    /* Decorative Images Styles */
+    .decorative-image {
+        position: fixed;
+        z-index: 2;
+        pointer-events: none;
+        animation: decorativeFloat 8s ease-in-out infinite;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
+    
+    .decorative-image:hover {
+        opacity: 0.9;
+        transform: scale(1.1);
+    }
+    
+    @keyframes decorativeFloat {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-20px) rotate(5deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(-3deg);
+        }
+        75% {
+            transform: translateY(-30px) rotate(3deg);
+        }
+    }
+    
+    .decorative-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 107, 157, 0.5);
+        box-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+    
+    .corner-image {
+        animation: cornerPulse 3s ease-in-out infinite;
+        opacity: 0.7;
+        transition: all 0.3s ease;
+    }
+    
+    .corner-image:hover {
+        opacity: 1;
+        transform: scale(1.05) rotate(var(--rotation));
+    }
+    
+    @keyframes cornerPulse {
+        0%, 100% {
+            transform: scale(1) rotate(var(--rotation));
+            opacity: 0.7;
+        }
+        50% {
+            transform: scale(1.1) rotate(var(--rotation));
+            opacity: 0.9;
+        }
+    }
+    
+    .corner-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 15px;
+        border: 3px solid rgba(255, 107, 157, 0.6);
+        box-shadow: 0 0 25px rgba(255, 107, 157, 0.4);
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+    
+    /* Responsive decorative images */
+    @media (max-width: 768px) {
+        .decorative-img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .corner-img {
+            width: 60px;
+            height: 60px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .decorative-img {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .corner-img {
+            width: 50px;
+            height: 50px;
         }
     }
 `;
