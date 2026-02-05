@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Proposal 💕</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <!-- Favicon Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <div class="container">
+        <!-- Floating Hearts Background -->
+        <div class="hearts-background">
+            <div class="floating-heart">❤️</div>
+            <div class="floating-heart">💕</div>
+            <div class="floating-heart">💖</div>
+            <div class="floating-heart">💗</div>
+            <div class="floating-heart">💝</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <h1 class="proposal-text">Will you be my Valentine? 💕</h1>
+            
+            <!-- Message Display Area -->
+            <div class="message-area" id="messageArea"></div>
+            
+            <!-- Buttons Container -->
+            <div class="buttons-container" id="buttonsContainer">
+                <button class="btn yes-btn" id="yesBtn">
+                    <span class="btn-text">YES ❤️</span>
+                </button>
+                <button class="btn no-btn" id="noBtn">
+                    <span class="btn-text">NO 💔</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Message (Hidden Initially) -->
+        <div class="success-message" id="successMessage">
+            <!-- Envelope Animation -->
+            <div class="envelope-container" id="envelopeContainer">
+                <div class="envelope">
+                    <div class="envelope-flap" id="envelopeFlap">
+                        <div class="flap-content">💕</div>
+                    </div>
+                    <div class="envelope-body">
+                        <div class="letter" id="letter">
+                            <div class="letter-content">
+                                <h2 class="letter-title">You Said YES! 💕</h2>
+                                <div class="letter-messages">
+                                    <p class="letter-line">My heart is doing happy dances right now! 🥰</p>
+                                    <p class="letter-line">You've made me the happiest person alive! ✨</p>
+                                    <p class="letter-line">I promise to love you more each day! 💖</p>
+                                    <p class="letter-line">You're my favorite human forever! 🌟</p>
+                                    <p class="letter-line">Happy Valentine's Day, my beautiful love! 😘</p>
+                                </div>
+                                <div class="letter-signature">
+                                    <p class="signature-text">Forever yours,</p>
+                                    <p class="signature-heart">💕 Your Valentine 💕</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Final Celebration Screen -->
+            <div class="final-celebration" id="finalCelebration">
+                <div class="celebration-content">
+                    <h1 class="celebration-title">YAYYY! WE'RE VALENTINES! 💕</h1>
+                    <div class="celebration-subtitle">
+                        <p class="subtitle-line">You just made my heart explode with happiness! 🎉</p>
+                        <p class="subtitle-line">Get ready for the most amazing Valentine's Day ever! 🌹</p>
+                    </div>
+                    <div class="love-meter">
+                        <div class="love-level">Love Level: INFINITY! ❤️</div>
+                        <div class="hearts-explosion">
+                            <span class="explosion-heart">💕</span>
+                            <span class="explosion-heart">💖</span>
+                            <span class="explosion-heart">💗</span>
+                            <span class="explosion-heart">💝</span>
+                            <span class="explosion-heart">�</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confetti Container -->
+        <div class="confetti-container" id="confettiContainer"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
